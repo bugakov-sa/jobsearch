@@ -1,0 +1,30 @@
+div.questions_list {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+.high_critical {
+    padding: 10;
+    margin: 2;
+    background-color:red;
+}
+.low_critical {
+    padding: 10;
+    margin: 2;
+    background-color:#FAFA33;
+}
+.no_critical {
+    padding: 10;
+    margin: 2;
+    background-color:#98FB98;
+}
+
+input[type=checkbox] {
+    width: 15;
+    height: 15;
+    margin-right: 10;
+}
+.question_tag {
+    margin-top: 5;
+    margin-right: 5;
+}
+.
