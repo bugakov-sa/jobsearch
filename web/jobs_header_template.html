@@ -1,8 +1,0 @@
-<div id="someTemplate" class="jobs_header">
-    <div v-if="sharedState.isJobsListMode()"> 
-        <button v-on:click="sharedState.setNewJobMode()">Новая вакансия</button> 
-    </div> 
-    <div v-if="sharedState.isJobDetailsMode() || sharedState.isNewJobMode()">
-        <button v-on:click="sharedState.setJobsListMode()">Список вакансий</button>
-    </div> 
-</div>
