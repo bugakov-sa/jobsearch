@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import selfed.spring.appsample.jobsearch.repository.JobRepository;
 import selfed.spring.appsample.jobsearch.controller.errorhandling.ValidationException;
 import selfed.spring.appsample.jobsearch.controller.errorhandling.Validator;
 import selfed.spring.appsample.jobsearch.model.Job;
+import selfed.spring.appsample.jobsearch.repository.JobRepository;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -51,11 +51,6 @@ public class JobController {
                 .orElse("")
 
         );
-        job.setLink(Optional
-                .ofNullable(job.getLink())
-                .orElse("")
-
-        );
         job.setWorked(Optional
                 .ofNullable(job.getWorked())
                 .orElse(false)
@@ -64,6 +59,7 @@ public class JobController {
                 .ofNullable(job.getNotes())
                 .orElse("")
         );
+        job.getLinks().forEach(jobLink -> jobLink.setJob(job));
 
         Job savedJob = jobRepository.save(job);
         return ResponseEntity.ok(savedJob);
@@ -88,11 +84,6 @@ public class JobController {
                 .orElse(job.getCompanyName())
 
         );
-        job.setLink(Optional
-                .ofNullable(editJob.getLink())
-                .orElse(job.getLink())
-
-        );
         job.setWorked(Optional
                 .ofNullable(editJob.getWorked())
                 .orElse(job.getWorked())
@@ -101,6 +92,13 @@ public class JobController {
                 .ofNullable(editJob.getNotes())
                 .orElse(job.getNotes())
         );
+        if (editJob.getLinks() != null) {
+            job.getLinks().clear();
+            editJob.getLinks().forEach(jobLink -> {
+                jobLink.setJob(job);
+                job.getLinks().add(jobLink);
+            });
+        }
 
         Job savedJob = jobRepository.save(job);
         return ResponseEntity.ok(savedJob);

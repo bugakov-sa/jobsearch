@@ -67,6 +67,10 @@ input {
 }
 .job_form > p > input[type=text] {
     width: 50%;
+    margin-right: 1%;
+}
+.job_form > div > input[type=text] {
+    width: 50%;
 }
 .job_form > p > textarea {
     width: 100%;

@@ -1,0 +1,1 @@
+alter table jobsearch.job drop column link;

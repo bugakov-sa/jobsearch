@@ -3,9 +3,13 @@
     <div class="job_form" v-if="!editing">
       <p>Название вакансии<br><input type="text" v-model="job.name" readonly/></p>
       <p>Название компании<br><input type="text" v-model="job.companyName" readonly/></p>
-      <p v-if="hasLink">Ссылка на описание вакансии<br><a :href="job.link" v-text="job.link"/></p>
-      <p>Ошибки разобраны <input type="checkbox" v-model="job.worked" disabled/></p>
-      <p>Заметки<br><textarea v-model="job.notes" readonly></textarea></p>
+      <div v-if="hasJobLinks">Ссылки
+        <div v-bind:key="i" v-for="(jobLink, i) in job.links">
+          <a :href="jobLink.link" v-text="jobLink.link"/>
+        </div>
+      </div>
+      <br><p>Ошибки разобраны <input type="checkbox" v-model="job.worked" disabled/></p>
+      <p>Заметки<textarea v-model="job.notes" readonly></textarea></p>
       <p>
         <button @click="edit"><font-awesome-icon icon="pen"/> Изменить</button>
         <button @click="remove"><font-awesome-icon icon="trash-alt"/> Удалить</button>
@@ -14,9 +18,13 @@
     <div class="job_form" v-else>
       <p>Название вакансии<br><input type="text" v-model="editingJob.name"/></p>
       <p>Название компании<br><input type="text" v-model="editingJob.companyName"/></p>
-      <p>Ссылка на описание вакансии<br><input type="text" v-model="editingJob.link"/></p>
-      <p>Ошибки разобраны <input type="checkbox" v-model="editingJob.worked"/></p>
-      <p>Заметки<br><textarea v-model="editingJob.notes"></textarea></p>
+      Ссылки
+      <p><input type="text" v-model="newJobLink"/><button @click="addLink"><font-awesome-icon icon="plus-square"/></button></p>
+      <div v-bind:key="i" v-for="(jobLink, i) in editingJob.links">
+        <button @click="removeLink(i)"><font-awesome-icon icon="trash-alt"/></button><a :href="jobLink.link" v-text="jobLink.link"/>
+      </div>
+      <br><p>Ошибки разобраны <input type="checkbox" v-model="editingJob.worked"/></p>
+      <p>Заметки<textarea v-model="editingJob.notes"></textarea></p>
       <p>
         <button @click="save"><font-awesome-icon icon="save"/> Сохранить</button>
         <button @click="cancel"><font-awesome-icon icon="window-close"/> Отменить</button>
@@ -33,14 +41,15 @@ export default {
   data: function () {
     return {
       job: {},
+      newJobLink: '',
       editing: false,
       editingJob: {}
     }
   },
   computed: {
-    hasLink () {
-      var link = this.job.link
-      return link && link.length > 0
+    hasJobLinks () {
+      var links = this.job.links
+      return links && links.length > 0
     }
   },
   created: function () {
@@ -50,13 +59,22 @@ export default {
     })
   },
   methods: {
+    addLink () {
+      if (this.newJobLink.length > 0) {
+        this.editingJob.links.unshift({ link: this.newJobLink })
+        this.newJobLink = ''
+      }
+    },
+    removeLink (i) {
+      this.editingJob.links.splice(i, 1)
+    },
     edit () {
       this.editingJob = {
         name: this.job.name,
-        link: this.job.link,
         companyName: this.job.companyName,
         worked: this.job.worked,
-        notes: this.job.notes
+        notes: this.job.notes,
+        links: Array.from(this.job.links)
       }
       this.editing = true
     },
@@ -75,10 +93,10 @@ export default {
     },
     save () {
       this.job.name = this.editingJob.name
-      this.job.link = this.editingJob.link
       this.job.companyName = this.editingJob.companyName
       this.job.worked = this.editingJob.worked
       this.job.notes = this.editingJob.notes
+      this.job.links = Array.from(this.editingJob.links)
       var options = {
         method: 'put',
         body: JSON.stringify(this.job),

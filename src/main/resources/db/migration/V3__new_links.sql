@@ -1,0 +1,1 @@
+insert into jobsearch.job_link select gen_random_uuid() as id, id as job_id, link from jobsearch.job;
