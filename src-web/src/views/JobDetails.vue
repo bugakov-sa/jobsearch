@@ -51,7 +51,7 @@ export default {
       this.editing = true
     },
     remove () {
-      if (confirm('Удалить вакансию ' + this.job.name + '?')) {
+      if (confirm('Удалить вакансию?')) {
         var options = {
           method: 'delete',
           headers: {
@@ -64,18 +64,20 @@ export default {
       }
     },
     save (job) {
-      var options = {
-        method: 'put',
-        body: JSON.stringify(job),
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8'
+      if (confirm('Сохранить изменения?')) {
+        var options = {
+          method: 'put',
+          body: JSON.stringify(job),
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+          }
         }
+        var component = this
+        fetch('/api/job/' + this.$route.params.jobId, options).then(r => r.json()).then(data => {
+          this.job = data
+          component.editing = false
+        })
       }
-      var component = this
-      fetch('/api/job/' + this.$route.params.jobId, options).then(r => r.json()).then(data => {
-        this.job = data
-        component.editing = false
-      })
     },
     cancel () {
       this.editing = false
