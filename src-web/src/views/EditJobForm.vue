@@ -3,7 +3,7 @@
     <p>Название вакансии<br><input type="text" v-model="editingJob.name"/></p>
     <p>Название компании<br><input type="text" v-model="editingJob.companyName"/></p>
     Ссылки
-    <p><input type="text" v-model="newJobLink"/><button @click="addLink"><font-awesome-icon icon="plus-square"/></button></p>
+    <p><input type="text" v-model="newJobLink" @keyup.enter="addLink"/><button @click="addLink"><font-awesome-icon icon="plus-square"/></button></p>
     <div v-bind:key="i" v-for="(jobLink, i) in editingJob.links">
       <button @click="removeLink(i)"><font-awesome-icon icon="trash-alt"/></button><a :href="jobLink.link" v-text="jobLink.link"/>
     </div>
