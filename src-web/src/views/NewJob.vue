@@ -21,7 +21,11 @@ export default {
         }
       }
       fetch('/api/job', options).then(r => {
-        router.push({ name: 'JobsList' })
+        if (!r.ok) {
+          r.text().then(t => alert(t))
+        } else {
+          router.push({ name: 'JobsList' })
+        }
       })
     },
     cancel () {

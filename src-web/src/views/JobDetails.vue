@@ -73,9 +73,15 @@ export default {
           }
         }
         var component = this
-        fetch('/api/job/' + this.$route.params.jobId, options).then(r => r.json()).then(data => {
-          this.job = data
-          component.editing = false
+        fetch('/api/job/' + this.$route.params.jobId, options).then(r => {
+          if (!r.ok) {
+            r.text().then(t => alert(t))
+          } else {
+            r.json().then(data => {
+              this.job = data
+              component.editing = false
+            })
+          }
         })
       }
     },

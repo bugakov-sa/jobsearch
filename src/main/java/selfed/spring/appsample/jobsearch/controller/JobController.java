@@ -37,20 +37,10 @@ public class JobController {
     }
 
     @PostMapping(path = "/api/job")
-    public ResponseEntity createJob(@RequestBody Job job) {
+    public ResponseEntity createJob(@RequestBody Job job) throws ValidationException {
 
-        //TODO: check fields
+        validator.checkNewJob(job);
 
-        job.setName(Optional
-                .ofNullable(job.getName())
-                .orElse("")
-
-        );
-        job.setCompanyName(Optional
-                .ofNullable(job.getCompanyName())
-                .orElse("")
-
-        );
         job.setWorked(Optional
                 .ofNullable(job.getWorked())
                 .orElse(false)
@@ -70,8 +60,7 @@ public class JobController {
             @RequestBody Job editJob, @PathVariable UUID id
     ) throws ValidationException {
 
-        validator.checkJobId(id);
-        //TODO: check other fields
+        validator.checkEditJob(editJob, id);
 
         Job job = jobRepository.findById(id).orElse(null);
         job.setName(Optional
