@@ -50,6 +50,7 @@ public class JobController {
                 .orElse("")
         );
         job.getLinks().forEach(jobLink -> jobLink.setJob(job));
+        job.getQuestions().forEach(question -> question.setJob(job));
 
         Job savedJob = jobRepository.save(job);
         return ResponseEntity.ok(savedJob);
@@ -86,6 +87,13 @@ public class JobController {
             editJob.getLinks().forEach(jobLink -> {
                 jobLink.setJob(job);
                 job.getLinks().add(jobLink);
+            });
+        }
+        if (editJob.getQuestions() != null) {
+            job.getQuestions().clear();
+            editJob.getQuestions().forEach(question -> {
+                question.setJob(job);
+                job.getQuestions().add(question);
             });
         }
 

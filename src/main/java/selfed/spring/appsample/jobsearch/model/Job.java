@@ -1,6 +1,8 @@
 package selfed.spring.appsample.jobsearch.model;
 
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -29,7 +31,16 @@ public class Job {
             cascade = {CascadeType.ALL},
             orphanRemoval = true
     )
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<JobLink> links;
+    @OneToMany(
+            mappedBy = "job",
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.ALL},
+            orphanRemoval = true
+    )
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<Question> questions;
 
     @PrePersist
     public void beforeCreate() {
