@@ -39,6 +39,6 @@ gradlew
 gradlew.bat
 gradle/
 
-config/
+config/application-*.properties
 
 .DS_Store/

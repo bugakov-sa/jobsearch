@@ -1,1 +1,0 @@
-java -jar build/libs/jobsearch-1.0.jar --spring.resources.static-locations=file:src-web/dist  --spring.config.location=file:config/
