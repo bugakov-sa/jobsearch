@@ -6,6 +6,7 @@
         <router-link :to="{name: 'JobDetails', params: {jobId: job.id}}">
           {{job.name}} ({{job.companyName}})
         </router-link>
+        <span class="job_preview">{{getJobNotesPreview(job)}}</span>
       </div>
     </div>
   </div>
@@ -29,6 +30,16 @@ export default {
   methods: {
     goToJobDetails (job) {
       router.push({ name: 'JobDetails', params: { jobId: job.id } })
+    },
+    getJobNotesPreview (job) {
+      var lines = job.notes.trim().split('\n')
+      var lastLine = lines[lines.length - 1]
+      var lengthBeforeCut = lastLine.length
+      lastLine = lastLine.substring(0, 50)
+      if (lastLine.length < lengthBeforeCut) {
+        lastLine = lastLine + '...'
+      }
+      return lastLine
     }
   }
 }
@@ -37,5 +48,8 @@ export default {
 <style scoped>
 a {
     margin-left:1%;
+}
+.job_preview {
+    padding-left: 1%;
 }
 </style>
